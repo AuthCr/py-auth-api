@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 
 # Usage:
-#  import api
-#  s = api.connect("127.0.0.1", 8999)
-#  api.auth(s, "root", "toor")
-#  api.has_access_to(s, "/some/path")
+#  import auth_api
+#  s = auth_api.connect("127.0.0.1", 8999)
+#  auth_api.auth(s, "root", "toor")
+#  auth_api.has_access_to(s, "/some/path")
 
 import socket
 

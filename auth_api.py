@@ -4,7 +4,7 @@
 #  import auth_api
 #  s = auth_api.connect("127.0.0.1", 8999)
 #  auth_api.auth(s, "root", "toor")
-#  auth_api.has_access_to(s, "/some/path")
+#  auth_api.has_access_to(s, "write", "/some/path")
 
 import socket
 
@@ -24,10 +24,11 @@ def auth(s, username, password):
     data = send_command(s, "AUTH : " + username + " " + password + "\n")
     return data == b'success\n'
 
-def has_access_to(s, path):
-    data = send_command(s, "USER HAS ACCESS TO : write " + path + "\n")
+def has_access_to(s, perm, path):
+    data = send_command(s, "USER HAS ACCESS TO : \\a " + perm + " " + path + "\n")
     return data == b'success\n'
 
+# Test
 if __name__ == "__main__":
     s = connect("127.0.0.1", 8999)
     if auth(s, "root", "toor"):
@@ -36,7 +37,7 @@ if __name__ == "__main__":
         print("Failed to connect")
         exit(1)
 
-    if has_access_to(s, "/tmp"):
+    if has_access_to(s, "write", "/tmp"):
         print("You have access to /tmp")
     else:
         print("You don't have access to /tmp")

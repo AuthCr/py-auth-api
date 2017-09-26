@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 
 # Usage:
-#  import auth_api
-#  s = auth_api.connect("127.0.0.1", 8999)
-#  auth_api.auth(s, "root", "toor")
-#  auth_api.has_access_to(s, "write", "/some/path")
+#  import credid_api
+#  s = credid_api.connect("127.0.0.1", 8999)
+#  credid_api.auth(s, "root", "toor")
+#  credid_api.has_access_to(s, "write", "/some/path")
 
 import socket
 

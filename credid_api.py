@@ -1,11 +1,5 @@
 #!/usr/bin/env python3
 
-# Usage:
-#  import credid_api
-#  s = credid_api.connect("127.0.0.1", 8999)
-#  credid_api.auth(s, "root", "toor")
-#  credid_api.has_access_to(s, "write", "/some/path")
-
 import socket
 
 def connect(ip, port):
@@ -15,8 +9,11 @@ def connect(ip, port):
 
 def send_command(api, cmd, options):
     query = cmd + "\n"
+    if not not options:
+        options_joined = " ".join(tuple(map((lambda x: x[0]+"="+x[1]), options.items())))
+        query = options_joined + " " + query
     api.send(query.encode('utf-8'))
-    data = api.recv(1024)
+    data = api.recv(4096)
     # print(data)
     return data
 

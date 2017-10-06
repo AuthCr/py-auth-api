@@ -17,3 +17,7 @@ if __name__ == "__main__":
         print("You have access to /tmp")
     else:
         print("You don't have access to /tmp\n" + str(r))
+        exit(2)
+    # List users with option
+    print(credid_api.group_list(api, {"COUNT": "1", "PAGE": "0"}))
+    print(credid_api.group_list(api, {"COUNT": "1", "PAGE": "1"}))

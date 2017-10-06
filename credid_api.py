@@ -9,35 +9,58 @@
 import socket
 
 def connect(ip, port):
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.connect((ip, port))
-    return s
+    api = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    api.connect((ip, port))
+    return api
 
-def send_command(s, cmd):
-    # print("> " + cmd)
-    s.send(cmd.encode('utf-8'))
-    data = s.recv(1024)
+def send_command(api, cmd, options):
+    query = cmd + "\n"
+    api.send(query.encode('utf-8'))
+    data = api.recv(1024)
     # print(data)
     return data
 
-def auth(s, username, password):
-    data = send_command(s, "AUTH : " + username + " " + password + "\n")
+def is_success(data):
     return data == b'success\n'
 
-def has_access_to(s, perm, path):
-    data = send_command(s, "USER HAS ACCESS TO : \\a " + perm + " " + path + "\n")
-    return data == b'success\n'
+def auth(api, username, password, options = {}):
+    return send_command(api, "AUTH : " + username + " " + password, options)
 
-# Test
-if __name__ == "__main__":
-    s = connect("127.0.0.1", 8999)
-    if auth(s, "root", "toor"):
-        print("Connected with root:toor")
-    else:
-        print("Failed to connect")
-        exit(1)
+def user_has_access_to(api, username, perm, path, options = {}):
+    return send_command(api, "USER HAS ACCESS TO : " + username + " " + perm + " " + path, options)
 
-    if has_access_to(s, "write", "/tmp"):
-        print("You have access to /tmp")
-    else:
-        print("You don't have access to /tmp")
+def group_add(api, group, perm, resource, options = {}):
+    return send_command(api, "GROUP ADD : " + group + " " + perm + " " + resource, options)
+
+def group_remove(api, group, resource, options = {}):
+    return send_command(api, "GROUP REMOVE : " + group + " " + resource, options)
+
+def group_list(api, options = {}):
+    return send_command(api, "GROUP LIST", options)
+
+def group_list_perms(api, group, options = {}):
+    return send_command(api, "GROUP LIST PERMS : " + group, options)
+
+def group_get_perm(api, group, resource, options = {}):
+    return send_command(api, "GROUP GET PERM : " + group + " " + resource, options)
+
+def user_list(api, options = {}):
+    return send_command(api, "USER LIST", options)
+
+def user_add(api, username, password, options = {}):
+    return send_command(api, "USER ADD : " + username + " " + password, options)
+
+def user_remove(api, username, options = {}):
+    return send_command(api, "USER REMOVE : " + username, options)
+
+def user_add_group(api, username, group, options = {}):
+    return send_command(api, "USER ADD GROUP : " + username + " " + group, options)
+
+def user_remove_group(api, username, group, options = {}):
+    return send_command(api, "USER REMOVE GROUP : " + usernae + " " + group, options)
+
+def user_list_groups(api, username, options = {}):
+    return send_command(api, "USER LIST GROUPS : " + username, options)
+
+def user_change_password(api, username, newpassword, options = {}):
+    return send_command(api, "USER CHANGE PASSWORD : " + username + " " + newpassword, options)
